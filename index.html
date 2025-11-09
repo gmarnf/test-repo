@@ -1,26 +1,119 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <title>Mon premier site GitHub Pages</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard SM1</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --bg: #f4f5f7;
+      --sidebar: #1f2937;
+      --primary: #2563eb;
+      --text: #111827;
+      --muted: #6b7280;
+      --card: #ffffff;
+      --radius: 12px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      margin-top: 50px;
-      background: #f0f0f0;
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      min-height: 100vh;
     }
-    h1 {
-      color: #2c3e50;
+    aside {
+      width: 220px;
+      background: var(--sidebar);
+      color: white;
+      padding: 24px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
     }
-    p {
-      color: #555;
+    aside h2 {
+      font-size: 18px;
+      margin-bottom: 24px;
+    }
+    aside a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      padding: 8px 12px;
+      border-radius: 8px;
+      transition: background 0.2s;
+    }
+    aside a:hover {
+      background: rgba(255,255,255,0.1);
+    }
+    main {
+      flex: 1;
+      padding: 32px;
+    }
+    .header {
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 24px;
+    }
+    .highlight {
+      background: var(--primary);
+      color: white;
+      padding: 16px;
+      border-radius: var(--radius);
+      font-size: 18px;
+      font-weight: 500;
+      margin-bottom: 32px;
+      display: inline-block;
+    }
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 24px;
+    }
+    .stat-card {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+    .stat-title {
+      font-size: 16px;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+    .stat-value {
+      font-size: 28px;
+      font-weight: 600;
+    }
+    @media (max-width: 700px) {
+      aside { display: none; }
+      main { padding: 16px; }
     }
   </style>
 </head>
 <body>
-  <h1>Bienvenue sur mon site 🚀</h1>
-  <p>Ce site est hébergé gratuitement grâce à GitHub Pages.</p>
-  <p>Essayez de modifier ce texte et de republier !</p>
+  <aside>
+    <h2>SM1 — Saison 2025/26</h2>
+    <a href="#">Accueil</a>
+    <a href="#">Calendrier</a>
+    <a href="#">Saison</a>
+    <a href="#">Matches</a>
+    <a href="#">Joueurs</a>
+  </aside>
+  <main>
+    <div class="header">Accueil</div>
+    <div class="highlight">À la une — % victoires/défaites : <strong>3V-1D (75%)</strong></div>
+    <div class="stats">
+      <div class="stat-card">
+        <div class="stat-title">Moy. pts marqués</div>
+        <div class="stat-value">69.8</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-title">Moy. pts encaissés</div>
+        <div class="stat-value">67.5</div>
+      </div>
+    </div>
+  </main>
 </body>
 </html>
