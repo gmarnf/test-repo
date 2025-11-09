@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Dashboard SM1</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     :root {
       --bg: #f4f5f7;
@@ -68,95 +69,4 @@
     }
     .stats {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 24px;
-    }
-    .stat-card {
-      background: var(--card);
-      border-radius: var(--radius);
-      padding: 20px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-    }
-    .stat-title {
-      font-size: 16px;
-      color: var(--muted);
-      margin-bottom: 8px;
-    }
-    .stat-value {
-      font-size: 28px;
-      font-weight: 600;
-    }
-    @media (max-width: 700px) {
-      aside { display: none; }
-      main { padding: 16px; }
-    }
-  </style>
-</head>
-<body>
-  <aside>
-    <h2>SM1 — Saison 2025/26</h2>
-    <a href="#" class="active">Accueil</a>
-    <a href="#">Calendrier</a>
-    <a href="#">Saison</a>
-    <a href="#">Matches</a>
-    <a href="#">Joueurs</a>
-  </aside>
-  <main>
-    <div class="header">Accueil</div>
-    <div class="highlight" id="headline">À la une — % victoires/défaites : <strong id="ratio">Calcul...</strong></div>
-    <div class="stats">
-      <div class="stat-card">
-        <div class="stat-title">Moy. pts marqués</div>
-        <div class="stat-value" id="pts-marques">0</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-title">Moy. pts encaissés</div>
-        <div class="stat-value" id="pts-encaisses">0</div>
-      </div>
-    </div>
-  </main>
-
-  <script>
-    // Statistiques dynamiques
-    const stats = {
-      victoires: 3,
-      defaites: 1,
-      ptsMarques: 69.8,
-      ptsEncaisses: 67.5
-    };
-
-    // Calcul du ratio
-    const total = stats.victoires + stats.defaites;
-    const pourcentage = Math.round((stats.victoires / total) * 100);
-    document.getElementById("ratio").textContent = `${stats.victoires}V-${stats.defaites}D (${pourcentage}%)`;
-
-    // Animation des chiffres
-    function animateValue(id, end, duration = 1000) {
-      const el = document.getElementById(id);
-      let start = 0;
-      const step = Math.ceil(end / (duration / 30));
-      const interval = setInterval(() => {
-        start += step;
-        if (start >= end) {
-          el.textContent = end.toFixed(1);
-          clearInterval(interval);
-        } else {
-          el.textContent = start.toFixed(1);
-        }
-      }, 30);
-    }
-
-    animateValue("pts-marques", stats.ptsMarques);
-    animateValue("pts-encaisses", stats.ptsEncaisses);
-
-    // Navigation active
-    document.querySelectorAll("aside a").forEach(link => {
-      link.addEventListener("click", e => {
-        e.preventDefault();
-        document.querySelectorAll("aside a").forEach(l => l.classList.remove("active"));
-        link.classList.add("active");
-      });
-    });
-  </script>
-</body>
-</html>
+      grid-template-columns: repeat(auto-fit, minmax(220px, 
