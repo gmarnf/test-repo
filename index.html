@@ -2,10 +2,12 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Dashboard SM1</title>
+
+  <!-- Google Fonts (HTTPS) -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
   <style>
     :root {
       --bg: #f4f5f7;
@@ -18,7 +20,7 @@
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      font-family: 'Inter', sans-serif;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
       background: var(--bg);
       color: var(--text);
       display: flex;
@@ -31,42 +33,194 @@
       padding: 24px 16px;
       display: flex;
       flex-direction: column;
-      gap: 20px;
+      gap: 12px;
     }
-    aside h2 {
-      font-size: 18px;
-      margin-bottom: 24px;
-    }
+    aside h2 { font-size: 18px; margin-bottom: 12px; }
     aside a {
-      color: white;
-      text-decoration: none;
-      font-weight: 500;
-      padding: 8px 12px;
-      border-radius: 8px;
-      transition: background 0.2s;
+      color: white; text-decoration: none; font-weight: 500;
+      padding: 8px 12px; border-radius: 8px; transition: background .2s;
     }
-    aside a.active, aside a:hover {
-      background: rgba(255,255,255,0.1);
-    }
-    main {
-      flex: 1;
-      padding: 32px;
-    }
-    .header {
-      font-size: 24px;
-      font-weight: 600;
-      margin-bottom: 24px;
-    }
+    aside a.active, aside a:hover { background: rgba(255,255,255,0.12); }
+    main { flex: 1; padding: 24px; }
+    .header { font-size: 24px; font-weight: 600; margin-bottom: 16px; }
     .highlight {
-      background: var(--primary);
-      color: white;
-      padding: 16px;
-      border-radius: var(--radius);
-      font-size: 18px;
-      font-weight: 500;
-      margin-bottom: 32px;
-      display: inline-block;
+      background: var(--primary); color: white; padding: 12px 16px;
+      border-radius: var(--radius); font-size: 16px; font-weight: 500;
+      margin-bottom: 24px; display: inline-block;
+    }
+    .grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start;
     }
     .stats {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px; margin-bottom: 24px;
+    }
+    .card {
+      background: var(--card); border-radius: var(--radius);
+      padding: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+    .stat-title { font-size: 14px; color: var(--muted); margin-bottom: 6px; }
+    .stat-value { font-size: 26px; font-weight: 600; }
+    form.card label { display: block; margin-bottom: 6px; font-weight: 600; }
+    form.card input {
+      width: 100%; padding: 8px; margin-bottom: 12px;
+      border: 1px solid #d1d5db; border-radius: 8px;
+    }
+    form.card button {
+      background: var(--primary); color: white; border: none;
+      padding: 10px 14px; border-radius: 8px; font-weight: 600; cursor: pointer;
+    }
+    canvas { width: 100%; max-width: 600px; }
+    @media (max-width: 860px) {
+      aside { display: none; }
+      .grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <aside>
+    <h2>SM1 — Saison 2025/26</h2>
+    <a href="#" class="active">Accueil</a>
+    <a href="#">Calendrier</a>
+    <a href="#">Saison</a>
+    <a href="#">Matches</a>
+    <a href="#">Joueurs</a>
+  </aside>
+
+  <main>
+    <div class="header">Accueil</div>
+    <div class="highlight">À la une — % victoires/défaites : <strong id="ratio">Calcul...</strong></div>
+
+    <div class="grid">
+      <div>
+        <div class="stats">
+          <div class="card">
+            <div class="stat-title">Moy. pts marqués</div>
+            <div class="stat-value" id="ptsMarquesOut">0</div>
+          </div>
+          <div class="card">
+            <div class="stat-title">Moy. pts encaissés</div>
+            <div class="stat-value" id="ptsEncaissesOut">0</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <canvas id="performanceChart" aria-label="Graphique des performances" role="img"></canvas>
+        </div>
+      </div>
+
+      <form class="card" id="statsForm" aria-labelledby="formTitle">
+        <h3 id="formTitle" style="margin-bottom:12px;">Mettre à jour les statistiques</h3>
+        <label for="victoiresInput">Victoires</label>
+        <input type="number" id="victoiresInput" value="3" min="0" />
+        <label for="defaitesInput">Défaites</label>
+        <input type="number" id="defaitesInput" value="1" min="0" />
+        <label for="ptsMarquesInput">Points marqués</label>
+        <input type="number" id="ptsMarquesInput" value="69.8" step="0.1" />
+        <label for="ptsEncaissesInput">Points encaissés</label>
+        <input type="number" id="ptsEncaissesInput" value="67.5" step="0.1" />
+        <button type="submit">Appliquer</button>
+      </form>
+    </div>
+  </main>
+
+  <!-- Chart.js via CDN (HTTPS) -->
+  <script defer src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Script applicatif -->
+  <script>
+    // Attendre que Chart.js soit chargé et que le DOM soit prêt
+    document.addEventListener('DOMContentLoaded', function () {
+      const ratioEl = document.getElementById('ratio');
+      const ptsMarquesOut = document.getElementById('ptsMarquesOut');
+      const ptsEncaissesOut = document.getElementById('ptsEncaissesOut');
+
+      const form = document.getElementById('statsForm');
+      const victoiresInput = document.getElementById('victoiresInput');
+      const defaitesInput = document.getElementById('defaitesInput');
+      const ptsMarquesInput = document.getElementById('ptsMarquesInput');
+      const ptsEncaissesInput = document.getElementById('ptsEncaissesInput');
+
+      let chartInstance = null;
+
+      function renderChart(ptsMarques, ptsEncaisses) {
+        const ctx = document.getElementById('performanceChart').getContext('2d');
+        if (chartInstance) chartInstance.destroy();
+        chartInstance = new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: ['Pts marqués', 'Pts encaissés'],
+            datasets: [{
+              label: 'Performance',
+              data: [ptsMarques, ptsEncaisses],
+              backgroundColor: ['#2563eb', '#ef4444']
+            }]
+          },
+          options: {
+            responsive: true,
+            animation: { duration: 500 },
+            scales: { y: { beginAtZero: true } },
+            plugins: {
+              legend: { display: false },
+              tooltip: { enabled: true }
+            }
+          }
+        });
+      }
+
+      function updateStats(victoires, defaites, ptsMarques, ptsEncaisses) {
+        const total = victoires + defaites;
+        const pourcentage = total ? Math.round((victoires / total) * 100) : 0;
+        ratioEl.textContent = `${victoires}V-${defaites}D (${pourcentage}%)`;
+
+        ptsMarquesOut.textContent = Number(ptsMarques).toFixed(1);
+        ptsEncaissesOut.textContent = Number(ptsEncaisses).toFixed(1);
+
+        renderChart(ptsMarques, ptsEncaisses);
+      }
+
+      // Données initiales (peuvent être remplacées par l’API)
+      const initialData = { victoires: 3, defaites: 1, ptsMarques: 69.8, ptsEncaisses: 67.5 };
+      updateStats(initialData.victoires, initialData.defaites, initialData.ptsMarques, initialData.ptsEncaisses);
+
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        const vic = parseInt(victoiresInput.value, 10) || 0;
+        const def = parseInt(defaitesInput.value, 10) || 0;
+        const pm = parseFloat(ptsMarquesInput.value) || 0;
+        const pe = parseFloat(ptsEncaissesInput.value) || 0;
+        updateStats(vic, def, pm, pe);
+      });
+
+      // Exemple de fetch API (mock JSON local)
+      // Place un fichier stats.json à la racine (ou /docs/) avec:
+      // { "victoires": 4, "defaites": 2, "ptsMarques": 72.3, "ptsEncaisses": 68.1 }
+      fetch('./stats.json')
+        .then(res => {
+          if (!res.ok) throw new Error('Impossible de charger stats.json');
+          return res.json();
+        })
+        .then(data => {
+          updateStats(data.victoires, data.defaites, data.ptsMarques, data.ptsEncaisses);
+          // Met à jour le formulaire avec les valeurs API
+          victoiresInput.value = data.victoires;
+          defaitesInput.value = data.defaites;
+          ptsMarquesInput.value = data.ptsMarques;
+          ptsEncaissesInput.value = data.ptsEncaisses;
+        })
+        .catch(() => {
+          // Silencieux si le fichier n’existe pas (démo)
+        });
+
+      // Navigation active
+      document.querySelectorAll('aside a').forEach(link => {
+        link.addEventListener('click', e => {
+          e.preventDefault();
+          document.querySelectorAll('aside a').forEach(l => l.classList.remove('active'));
+          link.classList.add('active');
+        });
+      });
+    });
+  </script>
+</body>
+</html>
