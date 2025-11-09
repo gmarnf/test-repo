@@ -44,7 +44,7 @@
       border-radius: 8px;
       transition: background 0.2s;
     }
-    aside a:hover {
+    aside a.active, aside a:hover {
       background: rgba(255,255,255,0.1);
     }
     main {
@@ -95,7 +95,7 @@
 <body>
   <aside>
     <h2>SM1 — Saison 2025/26</h2>
-    <a href="#">Accueil</a>
+    <a href="#" class="active">Accueil</a>
     <a href="#">Calendrier</a>
     <a href="#">Saison</a>
     <a href="#">Matches</a>
@@ -103,17 +103,60 @@
   </aside>
   <main>
     <div class="header">Accueil</div>
-    <div class="highlight">À la une — % victoires/défaites : <strong>3V-1D (75%)</strong></div>
+    <div class="highlight" id="headline">À la une — % victoires/défaites : <strong id="ratio">Calcul...</strong></div>
     <div class="stats">
       <div class="stat-card">
         <div class="stat-title">Moy. pts marqués</div>
-        <div class="stat-value">69.8</div>
+        <div class="stat-value" id="pts-marques">0</div>
       </div>
       <div class="stat-card">
         <div class="stat-title">Moy. pts encaissés</div>
-        <div class="stat-value">67.5</div>
+        <div class="stat-value" id="pts-encaisses">0</div>
       </div>
     </div>
   </main>
+
+  <script>
+    // Statistiques dynamiques
+    const stats = {
+      victoires: 3,
+      defaites: 1,
+      ptsMarques: 69.8,
+      ptsEncaisses: 67.5
+    };
+
+    // Calcul du ratio
+    const total = stats.victoires + stats.defaites;
+    const pourcentage = Math.round((stats.victoires / total) * 100);
+    document.getElementById("ratio").textContent = `${stats.victoires}V-${stats.defaites}D (${pourcentage}%)`;
+
+    // Animation des chiffres
+    function animateValue(id, end, duration = 1000) {
+      const el = document.getElementById(id);
+      let start = 0;
+      const step = Math.ceil(end / (duration / 30));
+      const interval = setInterval(() => {
+        start += step;
+        if (start >= end) {
+          el.textContent = end.toFixed(1);
+          clearInterval(interval);
+        } else {
+          el.textContent = start.toFixed(1);
+        }
+      }, 30);
+    }
+
+    animateValue("pts-marques", stats.ptsMarques);
+    animateValue("pts-encaisses", stats.ptsEncaisses);
+
+    // Navigation active
+    document.querySelectorAll("aside a").forEach(link => {
+      link.addEventListener("click", e => {
+        e.preventDefault();
+        document.querySelectorAll("aside a").forEach(l => l.classList.remove("active"));
+        link.classList.add("active");
+      });
+    });
+  </script>
 </body>
 </html>
