@@ -1,5 +1,6 @@
 [
-  { "date": "2025-09-15", "adversaire": "Equipe A", "score": "72-65", "resultat": "Victoire" },
-  { "date": "2025-09-22", "adversaire": "Equipe B", "score": "68-70", "resultat": "Défaite" },
-  { "date": "2025-10-01", "adversaire": "Equipe C", "score": "75-60", "resultat": "Victoire" }
+  { "date": "2025-09-15", "adversaire": "@ Le Perreux", "score": "52-80", "resultat": "Victoire" },
+  { "date": "2025-09-22", "adversaire": "vs Choisy le Roi", "score": "76-64", "resultat": "Victoire" },
+  { "date": "2025-10-01", "adversaire": "@ L'Haÿ les roses", "score": "75-77", "resultat": "Victoire" },
+  { "date": "2025-11-08", "adversaire": "vs Boissy", "score": "46-79", "resultat": "Défaite" }
 ]
