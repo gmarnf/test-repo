@@ -78,8 +78,10 @@ async function loadMatches() {
     const data = await res.json();
     const tbody = document.getElementById("matchesBody");
     tbody.innerHTML = "";
-    data.forEach(match => {
+    data.forEach((match, index) => {
       const row = document.createElement("tr");
+      row.setAttribute("data-index", index);
+      row.style.cursor = "pointer";
       row.innerHTML = `
         <td>${match.equipe}</td>
         <td>${match.journee}</td>
@@ -98,8 +100,10 @@ async function loadMatches() {
         <td>${match.diff}</td>
         <td>${match.resultat}</td>
       `;
+      row.addEventListener("click", () => showMatchDetail(match));
       tbody.appendChild(row);
     });
+
   } catch (err) {
     console.error("Erreur de chargement matches.json", err);
     document.getElementById("matchesBody").innerHTML =
