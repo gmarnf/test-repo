@@ -110,6 +110,31 @@ async function loadMatches() {
       `<tr><td colspan="16">Impossible de charger les données.</td></tr>`;
   }
 }
+function showMatchDetail(match) {
+  app.innerHTML = `
+    <h1>Détail du match — ${match.equipe} (${match.journee})</h1>
+    <div style="background:white; padding:20px; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.05); max-width:600px;">
+      <p><strong>Points :</strong> ${match.points}</p>
+      <p><strong>Field Goals :</strong> ${match.fg} (${match.fg_pct})</p>
+      <p><strong>2pts :</strong> ${match["2pts"]}</p>
+      <p><strong>3pts :</strong> ${match["3pts"]}</p>
+      <p><strong>Passes décisives (AST) :</strong> ${match.ast}</p>
+      <p><strong>Interceptions (STL) :</strong> ${match.stl}</p>
+      <p><strong>Contres (BLK) :</strong> ${match.blk}</p>
+      <p><strong>Rebonds offensifs :</strong> ${match.rbo}</p>
+      <p><strong>Rebonds défensifs :</strong> ${match.rbd}</p>
+      <p><strong>Ballons perdus (FREC) :</strong> ${match.frec}</p>
+      <p><strong>Fautes (TF) :</strong> ${match.tf}</p>
+      <p><strong>Différentiel :</strong> ${match.diff}</p>
+      <p><strong>Résultat :</strong> ${match.resultat}</p>
+      <button id="backToMatches" style="margin-top:20px; padding:10px 16px; background:#2563eb; color:white; border:none; border-radius:8px; cursor:pointer;">← Retour aux matchs</button>
+    </div>
+  `;
+
+  document.getElementById("backToMatches").addEventListener("click", () => {
+    loadView("matches");
+  });
+}
 
   // Vue par défaut
   loadView("home");
