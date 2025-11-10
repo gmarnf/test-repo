@@ -1,0 +1,38 @@
+[
+  {
+    "equipe": "Le Perreux",
+    "journee": "J01",
+    "points": 63,
+    "fg": "25/70",
+    "fg_pct": "35.7%",
+    "2pts": "17/41",
+    "3pts": "8/29",
+    "ast": 14,
+    "stl": 7,
+    "blk": 1,
+    "rbo": 18,
+    "rbd": 10,
+    "frec": 30,
+    "tf": 28,
+    "diff": "-2",
+    "resultat": "X"
+  },
+  {
+    "equipe": "L’Haÿ-les-Roses",
+    "journee": "J03",
+    "points": 77,
+    "fg": "30/75",
+    "fg_pct": "40.0%",
+    "2pts": "25/52",
+    "3pts": "5/23",
+    "ast": 19,
+    "stl": 10,
+    "blk": 3,
+    "rbo": 17,
+    "rbd": 18,
+    "frec": 20,
+    "tf": 22,
+    "diff": "+12",
+    "resultat": "V"
+  }
+]
