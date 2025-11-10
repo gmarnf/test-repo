@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Dashboard SM1</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     body { font-family: Inter, sans-serif; margin:0; display:flex; min-height:100vh; background:#f4f5f7; }
     aside { width:220px; background:#1f2937; color:white; padding:24px 16px; display:flex; flex-direction:column; gap:12px; }
@@ -17,11 +18,14 @@
     th, td { padding:12px; text-align:left; border-bottom:1px solid #e5e7eb; }
     th { background:#2563eb; color:white; }
     tr:last-child td { border-bottom:none; }
+    input { padding:8px; margin-bottom:16px; width:300px; }
+    button { padding:10px 16px; background:#2563eb; color:white; border:none; border-radius:8px; cursor:pointer; font-weight:600; }
+    canvas { margin-top:20px; max-width:600px; }
   </style>
 </head>
 <body>
   <aside>
-    <h2>SM1 — Saison 2025/26</h2>
+    <h2>SM1 — Saison 2025/2026</h2>
     <a data-view="home" class="active">Accueil</a>
     <a data-view="calendar">Calendrier</a>
     <a data-view="saison">Saison</a>
