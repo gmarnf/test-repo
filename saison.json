@@ -1,0 +1,5 @@
+[
+  { "date": "2025-09-15", "adversaire": "Equipe A", "score": "72-65", "resultat": "Victoire" },
+  { "date": "2025-09-22", "adversaire": "Equipe B", "score": "68-70", "resultat": "Défaite" },
+  { "date": "2025-10-01", "adversaire": "Equipe C", "score": "75-60", "resultat": "Victoire" }
+]
