@@ -4,40 +4,33 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Dashboard SM1</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <style>
-    body { font-family: Inter, sans-serif; margin:0; display:flex; min-height:100vh; background:#f4f5f7; }
-    aside { width:220px; background:#1f2937; color:white; padding:24px 16px; display:flex; flex-direction:column; gap:12px; }
-    aside h2 { font-size:18px; margin-bottom:12px; }
-    aside a { color:white; text-decoration:none; font-weight:500; padding:8px 12px; border-radius:8px; transition:background .2s; cursor:pointer; }
-    aside a.active, aside a:hover { background:rgba(255,255,255,0.12); }
-    main { flex:1; padding:24px; }
-    h1 { font-size:24px; margin-bottom:20px; }
-    table { width:100%; border-collapse:collapse; background:white; border-radius:8px; overflow:hidden; box-shadow:0 4px 12px rgba(0,0,0,0.05); }
-    th, td { padding:12px; text-align:left; border-bottom:1px solid #e5e7eb; }
-    th { background:#2563eb; color:white; }
-    tr:last-child td { border-bottom:none; }
-    input { padding:8px; margin-bottom:16px; width:300px; }
-    button { padding:10px 16px; background:#2563eb; color:white; border:none; border-radius:8px; cursor:pointer; font-weight:600; }
-    canvas { margin-top:20px; max-width:600px; }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <aside>
     <h2>SM1 — Saison 2025/2026</h2>
-    <a data-view="home" class="active">Accueil</a>
-    <a data-view="calendar">Calendrier</a>
-    <a data-view="saison">Saison</a>
-    <a data-view="matches">Matches</a>
-    <a data-view="players">Joueurs</a>
+    <nav>
+      <a data-view="home" class="active">Accueil</a>
+      <a data-view="calendar">Calendrier</a>
+      <a data-view="saison">Saison</a>
+      <a data-view="matches">Matches</a>
+      <a data-view="players">Joueurs</a>
+    </nav>
   </aside>
 
   <main id="app">
-    <!-- Contenu injecté par JS -->
+    <!-- contenu injecté par mainapp.js -->
   </main>
 
-  <!-- ⚠️ Corrigé : on appelle mainapp.js -->
+  <!-- Navigation mobile -->
+  <nav class="mobile-nav">
+    <button data-view="home">🏠</button>
+    <button data-view="saison">📊</button>
+    <button data-view="matches">🏀</button>
+    <button data-view="players">👥</button>
+  </nav>
+
   <script src="mainapp.js"></script>
 </body>
 </html>
