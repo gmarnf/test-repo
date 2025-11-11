@@ -44,31 +44,22 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function loadView(view) {
-    if (activeChart) {
-      activeChart.destroy();
-      activeChart = null;
-    }
-    switch (view) {
-      case "home":
-        renderHome();
-        break;
-      case "calendar":
-        renderCalendar();
-        break;
-      case "saison":
-        renderSaison();
-        break;
-      case "matches":
-        renderMatchesView();
-        break;
-      case "players":
-        renderPlayers();
-        break;
-      default:
-        renderHome();
-        break;
-    }
+  if (activeChart) {
+    activeChart.destroy();
+    activeChart = null;
   }
+  switch (view) {
+    case "home": renderHome(); break;
+    case "calendar": renderCalendar(); break;
+    case "saison": renderSaison(); break;
+    case "matches": renderMatchesView(); break;
+    case "players": renderPlayers(); break;
+    case "compare": renderPlayersComparison(); break;
+    case "history": renderPlayerHistory(); break;
+    default: renderHome(); break;
+  }
+}
+
 
   // Accueil — Résumé de saison
 function renderHome() {
