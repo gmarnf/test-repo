@@ -385,3 +385,109 @@ function renderPlayers() {
     return isNaN(n) ? 0 : n;
   }
 });
+
+// Comparaison entre deux joueurs
+function renderPlayersComparison() {
+  app.innerHTML = `
+    <h1>Comparer deux joueurs</h1>
+    <div class="card">
+      <label>Joueur 1 : <input type="text" id="player1" placeholder="Nom du joueur"></label>
+      <label>Joueur 2 : <input type="text" id="player2" placeholder="Nom du joueur"></label>
+      <label>Statistique :
+        <select id="statSelect">
+          <option value="points">Points</option>
+          <option value="passes">Passes</option>
+          <option value="rebonds">Rebonds</option>
+          <option value="interceptions">Interceptions</option>
+          <option value="contres">Contres</option>
+        </select>
+      </label>
+      <button id="compareBtn">Comparer</button>
+      <canvas id="compareChart"></canvas>
+    </div>
+  `;
+
+  document.getElementById("compareBtn").onclick = () => {
+    const p1 = document.getElementById("player1").value.trim();
+    const p2 = document.getElementById("player2").value.trim();
+    const stat = document.getElementById("statSelect").value;
+
+    fetch("data/players.json")
+      .then(res => res.json())
+      .then(players => {
+        const player1 = players.find(p => p.nom === p1);
+        const player2 = players.find(p => p.nom === p2);
+
+        if (!player1 || !player2) {
+          alert("Un des joueurs n'existe pas !");
+          return;
+        }
+
+        const ctx = document.getElementById("compareChart").getContext("2d");
+        new Chart(ctx, {
+          type: "bar",
+          data: {
+            labels: [player1.nom, player2.nom],
+            datasets: [{
+              label: stat,
+              data: [player1[stat], player2[stat]],
+              backgroundColor: ["#2563eb", "#ef4444"]
+            }]
+          },
+          options: { responsive: true }
+        });
+      });
+  };
+}
+
+// Historique d’un joueur
+function renderPlayerHistory() {
+  app.innerHTML = `
+    <h1>Historique d'un joueur</h1>
+    <div class="card">
+      <label>Joueur : <input type="text" id="playerName" placeholder="Nom du joueur"></label>
+      <label>Statistique :
+        <select id="statHistory">
+          <option value="points">Points</option>
+          <option value="passes">Passes</option>
+          <option value="rebonds">Rebonds</option>
+        </select>
+      </label>
+      <button id="historyBtn">Afficher</button>
+      <canvas id="historyChart"></canvas>
+    </div>
+  `;
+
+  document.getElementById("historyBtn").onclick = () => {
+    const player = document.getElementById("playerName").value.trim();
+    const stat = document.getElementById("statHistory").value;
+
+    fetch("data/players_history.json")
+      .then(res => res.json())
+      .then(history => {
+        if (!history[player]) {
+          alert("Joueur introuvable !");
+          return;
+        }
+
+        const labels = history[player].map(h => h.saison || h.date);
+        const values = history[player].map(h => h[stat]);
+
+        const ctx = document.getElementById("historyChart").getContext("2d");
+        new Chart(ctx, {
+          type: "line",
+          data: {
+            labels,
+            datasets: [{
+              label: `${player} — ${stat}`,
+              data: values,
+              borderColor: "#2563eb",
+              fill: false
+            }]
+          },
+          options: { responsive: true }
+        });
+      });
+  };
+}
+
