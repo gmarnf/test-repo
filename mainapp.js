@@ -130,15 +130,50 @@ function renderHome() {
   }
 
   // Joueurs — placeholder
-  function renderPlayers() {
-    app.innerHTML = `
-      <h1>Joueurs</h1>
-      <div class="card">
-        <p>La liste des joueurs et leurs statistiques seront ajoutées ici.</p>
-        <p>Prévois un fichier data/players.json pour alimenter cette vue.</p>
-      </div>
-    `;
-  }
+// Vue Joueurs — tableau des joueurs
+function renderPlayers() {
+  app.innerHTML = `
+    <h1>Joueurs — Saison 2025/2026</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>Nom</th><th>Poste</th><th>Numéro</th>
+          <th>Points</th><th>Passes</th><th>Rebonds</th>
+          <th>Interceptions</th><th>Contres</th>
+        </tr>
+      </thead>
+      <tbody id="playersBody"></tbody>
+    </table>
+  `;
+
+  fetch("data/players.json")
+    .then(res => {
+      if (!res.ok) throw new Error("players.json introuvable");
+      return res.json();
+    })
+    .then(data => {
+      const tbody = document.getElementById("playersBody");
+      tbody.innerHTML = "";
+      data.forEach(player => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${sanitize(player.nom)}</td>
+          <td>${sanitize(player.poste)}</td>
+          <td>${sanitize(player.numero)}</td>
+          <td>${sanitize(player.points)}</td>
+          <td>${sanitize(player.passes)}</td>
+          <td>${sanitize(player.rebonds)}</td>
+          <td>${sanitize(player.interceptions)}</td>
+          <td>${sanitize(player.contres)}</td>
+        `;
+        tbody.appendChild(row);
+      });
+    })
+    .catch(err => {
+      document.getElementById("playersBody").innerHTML =
+        `<tr><td colspan="8" style="color:#ef4444;">Erreur: ${err.message}</td></tr>`;
+    });
+}
 
   // Saison — tableau des résultats
   function renderSaison() {
