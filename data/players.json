@@ -1,0 +1,52 @@
+[
+  {
+    "nom": "Jean Dupont",
+    "poste": "Meneur",
+    "numero": 4,
+    "points": 15.2,
+    "passes": 6.8,
+    "rebonds": 3.1,
+    "interceptions": 1.9,
+    "contres": 0.3
+  },
+  {
+    "nom": "Pierre Martin",
+    "poste": "Arrière",
+    "numero": 7,
+    "points": 12.5,
+    "passes": 4.2,
+    "rebonds": 2.8,
+    "interceptions": 1.5,
+    "contres": 0.5
+  },
+  {
+    "nom": "Lucas Bernard",
+    "poste": "Ailier",
+    "numero": 9,
+    "points": 17.0,
+    "passes": 3.5,
+    "rebonds": 5.6,
+    "interceptions": 1.2,
+    "contres": 0.8
+  },
+  {
+    "nom": "Thomas Leroy",
+    "poste": "Ailier fort",
+    "numero": 12,
+    "points": 10.8,
+    "passes": 2.1,
+    "rebonds": 7.4,
+    "interceptions": 0.9,
+    "contres": 1.1
+  },
+  {
+    "nom": "Mathieu Rousseau",
+    "poste": "Pivot",
+    "numero": 15,
+    "points": 13.6,
+    "passes": 1.5,
+    "rebonds": 9.2,
+    "interceptions": 0.6,
+    "contres": 1.7
+  }
+]
