@@ -1,0 +1,17 @@
+{
+  "Jean Dupont": [
+    { "saison": "2023/2024", "points": 14.2, "passes": 5.9, "rebonds": 3.0 },
+    { "saison": "2024/2025", "points": 15.2, "passes": 6.8, "rebonds": 3.1 },
+    { "saison": "2025/2026", "points": 16.0, "passes": 7.1, "rebonds": 3.4 }
+  ],
+  "Pierre Martin": [
+    { "saison": "2023/2024", "points": 11.0, "passes": 3.8, "rebonds": 2.5 },
+    { "saison": "2024/2025", "points": 12.5, "passes": 4.2, "rebonds": 2.8 },
+    { "saison": "2025/2026", "points": 13.1, "passes": 4.5, "rebonds": 3.0 }
+  ],
+  "Lucas Bernard": [
+    { "saison": "2023/2024", "points": 16.5, "passes": 3.2, "rebonds": 5.0 },
+    { "saison": "2024/2025", "points": 17.0, "passes": 3.5, "rebonds": 5.6 },
+    { "saison": "2025/2026", "points": 18.3, "passes": 3.9, "rebonds": 6.1 }
+  ]
+}
