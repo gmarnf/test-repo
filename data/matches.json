@@ -15,11 +15,11 @@
     "frec": 30,
     "tf": 28,
     "diff": "-2",
-    "resultat": "X"
+    "resultat": "Défaite"
   },
   {
     "equipe": "L’Haÿ-les-Roses",
-    "journee": "J03",
+    "journee": "J02",
     "points": 77,
     "fg": "30/75",
     "fg_pct": "40.0%",
@@ -33,6 +33,60 @@
     "frec": 20,
     "tf": 22,
     "diff": "+12",
-    "resultat": "V"
+    "resultat": "Victoire"
+  },
+  {
+    "equipe": "Créteil",
+    "journee": "J03",
+    "points": 70,
+    "fg": "28/68",
+    "fg_pct": "41.2%",
+    "2pts": "20/40",
+    "3pts": "8/28",
+    "ast": 15,
+    "stl": 9,
+    "blk": 2,
+    "rbo": 20,
+    "rbd": 15,
+    "frec": 25,
+    "tf": 24,
+    "diff": "+5",
+    "resultat": "Victoire"
+  },
+  {
+    "equipe": "Nogent-sur-Marne",
+    "journee": "J04",
+    "points": 58,
+    "fg": "22/65",
+    "fg_pct": "33.8%",
+    "2pts": "18/45",
+    "3pts": "4/20",
+    "ast": 12,
+    "stl": 6,
+    "blk": 1,
+    "rbo": 15,
+    "rbd": 12,
+    "frec": 18,
+    "tf": 20,
+    "diff": "-10",
+    "resultat": "Défaite"
+  },
+  {
+    "equipe": "Champigny",
+    "journee": "J05",
+    "points": 82,
+    "fg": "32/70",
+    "fg_pct": "45.7%",
+    "2pts": "24/45",
+    "3pts": "8/25",
+    "ast": 21,
+    "stl": 11,
+    "blk": 4,
+    "rbo": 22,
+    "rbd": 19,
+    "frec": 28,
+    "tf": 26,
+    "diff": "+15",
+    "resultat": "Victoire"
   }
 ]
