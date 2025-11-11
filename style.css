@@ -46,17 +46,20 @@ table {
   overflow: hidden;
   box-shadow: 0 4px 12px rgba(0,0,0,0.05);
 }
-th, td {
-  padding: 10px;
-  text-align: left;
-  border-bottom: 1px solid #e5e7eb;
-}
-th {
+thead {
   background: #2563eb;
   color: white;
 }
-tr:last-child td {
-  border-bottom: none;
+th, td {
+  padding: 10px;
+  text-align: left;
+}
+tbody tr:nth-child(even) {
+  background: #f9fafb;
+}
+tbody tr:hover {
+  background: #e0e7ff;
+  cursor: pointer;
 }
 
 /* Buttons */
@@ -70,6 +73,44 @@ button {
 }
 button:hover {
   background: #1e40af;
+}
+
+/* Cards */
+.card {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  max-width: 800px;
+}
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.stats-grid p {
+  margin: 0;
+  padding: 6px 0;
+  border-bottom: 1px solid #eee;
+}
+.buttons {
+  margin-top: 20px;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* Inputs */
+.filter-input {
+  padding: 8px;
+  margin-bottom: 16px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+.filter-input:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 4px #2563eb;
 }
 
 /* Mobile nav */
