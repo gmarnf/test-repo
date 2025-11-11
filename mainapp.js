@@ -71,32 +71,33 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // Accueil — Résumé de saison
-  function renderHome() {
-    app.innerHTML = `
-      <h1>Accueil</h1>
-      <div class="card">
-        <h2>Résumé de la saison</h2>
-        <p>Nombre de matchs joués : <span id="nbMatches">0</span></p>
-        <p>Victoires : <span id="nbVictoires">0</span></p>
-        <p>Défaites : <span id="nbDefaites">0</span></p>
-        <canvas id="resumeChart" style="max-width:420px;"></canvas>
-      </div>
-    `;
-    fetch("data/saison.json")
-      .then(res => {
-        if (!res.ok) throw new Error("saison.json introuvable");
-        return res.json();
-      })
-      .then(data => {
-        const nbMatches = data.length;
-        const nbVictoires = data.filter(m => (m.resultat || "").toLowerCase() === "victoire").length;
-        const nbDefaites = data.filter(m => (m.resultat || "").toLowerCase() === "défaite").length;
-        document.getElementById("nbMatches").textContent = nbMatches;
-        document.getElementById("nbVictoires").textContent = nbVictoires;
-        document.getElementById("nbDefaites").textContent = nbDefaites;
+function renderHome() {
+  app.innerHTML = `
+    <h1>Accueil</h1>
+    <div class="card">
+      <h2>Résumé de la saison</h2>
+      <p>Nombre de matchs joués : <span id="nbMatches">0</span></p>
+      <p>Victoires : <span id="nbVictoires">0</span></p>
+      <p>Défaites : <span id="nbDefaites">0</span></p>
+      <canvas id="resumeChart" width="300" height="300"></canvas>
+    </div>
+  `;
 
-        const ctx = document.getElementById("resumeChart").getContext("2d");
-        activeChart = new Chart(ctx, {
+  fetch("data/saison.json")
+    .then(res => res.json())
+    .then(data => {
+      const nbMatches = data.length;
+      const nbVictoires = data.filter(m => (m.resultat || "").toLowerCase() === "victoire").length;
+      const nbDefaites = data.filter(m => (m.resultat || "").toLowerCase() === "défaite").length;
+
+      document.getElementById("nbMatches").textContent = nbMatches;
+      document.getElementById("nbVictoires").textContent = nbVictoires;
+      document.getElementById("nbDefaites").textContent = nbDefaites;
+
+      const canvas = document.getElementById("resumeChart");
+      if (canvas) {
+        const ctx = canvas.getContext("2d");
+        new Chart(ctx, {
           type: "doughnut",
           data: {
             labels: ["Victoires", "Défaites"],
@@ -107,16 +108,15 @@ document.addEventListener("DOMContentLoaded", () => {
           },
           options: {
             responsive: true,
-            maintainAspectRatio: false,
             plugins: { legend: { position: "bottom" } }
           }
         });
-      })
-      .catch(err => {
-        const card = document.querySelector(".card");
-        card.insertAdjacentHTML("beforeend", `<p style="color:#ef4444;">Erreur: ${err.message}</p>`);
-      });
-  }
+      }
+    })
+    .catch(err => {
+      app.innerHTML += `<p style="color:red;">Erreur: ${err.message}</p>`;
+    });
+}
 
   // Calendrier — placeholder
   function renderCalendar() {
