@@ -1,35 +1,146 @@
+/* mainapp.js — SPA Dashboard SM1 (style maison)
+   Dépendances: Chart.js (CDN)
+   Données: data/saison.json, data/matches.json
+*/
+
 let matchesData = [];
 let currentMatchIndex = 0;
+let activeChart = null;
 
 document.addEventListener("DOMContentLoaded", () => {
   const app = document.getElementById("app");
-  const links = document.querySelectorAll("aside a, .mobile-nav button");
+  const navLinks = document.querySelectorAll("aside a, .mobile-nav button");
 
-  links.forEach(link => {
+  // Navigation via clic
+  navLinks.forEach(link => {
     link.addEventListener("click", () => {
-      links.forEach(l => l.classList.remove("active"));
-      link.classList.add("active");
-      const view = link.dataset.view;
-      loadView(view);
+      const view = link.dataset.view || "home";
+      setActiveLink(view);
+      navigateTo(view);
     });
   });
 
+  // Routage via hash
+  window.addEventListener("hashchange", () => {
+    const view = location.hash.replace("#", "") || "home";
+    setActiveLink(view);
+    loadView(view);
+  });
+
+  // Initialisation
+  const initialView = location.hash.replace("#", "") || "home";
+  setActiveLink(initialView);
+  loadView(initialView);
+
+  // Helpers
+  function setActiveLink(view) {
+    document.querySelectorAll("aside a").forEach(l => {
+      l.classList.toggle("active", l.dataset.view === view);
+    });
+  }
+
+  function navigateTo(view) {
+    location.hash = view;
+  }
+
   function loadView(view) {
-    if (view === "home") {
-      app.innerHTML = `<h1>Accueil</h1><p>Bienvenue sur le tableau de bord SM1.</p>`;
+    if (activeChart) {
+      activeChart.destroy();
+      activeChart = null;
     }
-    else if (view === "saison") {
-      renderSaison();
-    }
-    else if (view === "matches") {
-      renderMatchesView();
-    }
-    else {
-      app.innerHTML = `<h1>${view}</h1><p>Contenu à venir...</p>`;
+    switch (view) {
+      case "home":
+        renderHome();
+        break;
+      case "calendar":
+        renderCalendar();
+        break;
+      case "saison":
+        renderSaison();
+        break;
+      case "matches":
+        renderMatchesView();
+        break;
+      case "players":
+        renderPlayers();
+        break;
+      default:
+        renderHome();
+        break;
     }
   }
 
-  // Vue Saison
+  // Accueil — Résumé de saison
+  function renderHome() {
+    app.innerHTML = `
+      <h1>Accueil</h1>
+      <div class="card">
+        <h2>Résumé de la saison</h2>
+        <p>Nombre de matchs joués : <span id="nbMatches">0</span></p>
+        <p>Victoires : <span id="nbVictoires">0</span></p>
+        <p>Défaites : <span id="nbDefaites">0</span></p>
+        <canvas id="resumeChart" style="max-width:420px;"></canvas>
+      </div>
+    `;
+    fetch("data/saison.json")
+      .then(res => {
+        if (!res.ok) throw new Error("saison.json introuvable");
+        return res.json();
+      })
+      .then(data => {
+        const nbMatches = data.length;
+        const nbVictoires = data.filter(m => (m.resultat || "").toLowerCase() === "victoire").length;
+        const nbDefaites = data.filter(m => (m.resultat || "").toLowerCase() === "défaite").length;
+        document.getElementById("nbMatches").textContent = nbMatches;
+        document.getElementById("nbVictoires").textContent = nbVictoires;
+        document.getElementById("nbDefaites").textContent = nbDefaites;
+
+        const ctx = document.getElementById("resumeChart").getContext("2d");
+        activeChart = new Chart(ctx, {
+          type: "doughnut",
+          data: {
+            labels: ["Victoires", "Défaites"],
+            datasets: [{
+              data: [nbVictoires, nbDefaites],
+              backgroundColor: ["#2563eb", "#ef4444"]
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { position: "bottom" } }
+          }
+        });
+      })
+      .catch(err => {
+        const card = document.querySelector(".card");
+        card.insertAdjacentHTML("beforeend", `<p style="color:#ef4444;">Erreur: ${err.message}</p>`);
+      });
+  }
+
+  // Calendrier — placeholder
+  function renderCalendar() {
+    app.innerHTML = `
+      <h1>Calendrier</h1>
+      <div class="card">
+        <p>Le calendrier sera ajouté bientôt.</p>
+        <p>Astuce: tu pourras afficher les journées avec liens vers les détails de match.</p>
+      </div>
+    `;
+  }
+
+  // Joueurs — placeholder
+  function renderPlayers() {
+    app.innerHTML = `
+      <h1>Joueurs</h1>
+      <div class="card">
+        <p>La liste des joueurs et leurs statistiques seront ajoutées ici.</p>
+        <p>Prévois un fichier data/players.json pour alimenter cette vue.</p>
+      </div>
+    `;
+  }
+
+  // Saison — tableau des résultats
   function renderSaison() {
     app.innerHTML = `
       <h1>Saison — Résultats</h1>
@@ -40,25 +151,38 @@ document.addEventListener("DOMContentLoaded", () => {
           </tr>
         </thead>
         <tbody id="saisonBody"></tbody>
-      </table>`;
+      </table>
+    `;
     fetch("data/saison.json")
-      .then(res => res.json())
+      .then(res => {
+        if (!res.ok) throw new Error("saison.json introuvable");
+        return res.json();
+      })
       .then(data => {
         const tbody = document.getElementById("saisonBody");
         tbody.innerHTML = "";
         data.forEach(match => {
           const row = document.createElement("tr");
-          row.innerHTML = `<td>${match.date}</td><td>${match.adversaire}</td><td>${match.score}</td><td>${match.resultat}</td>`;
+          row.innerHTML = `
+            <td>${sanitize(match.date)}</td>
+            <td>${sanitize(match.adversaire)}</td>
+            <td>${sanitize(match.score)}</td>
+            <td>${sanitize(match.resultat)}</td>
+          `;
           tbody.appendChild(row);
         });
+      })
+      .catch(err => {
+        document.getElementById("saisonBody").innerHTML =
+          `<tr><td colspan="4" style="color:#ef4444;">Erreur: ${err.message}</td></tr>`;
       });
   }
 
-  // Vue Matches
+  // Matches — table + filtre
   function renderMatchesView() {
     app.innerHTML = `
       <h1>Matchs — Saison 2025/2026</h1>
-      <input type="text" id="filterInput" placeholder="Filtrer par équipe ou journée" />
+      <input type="text" id="filterInput" placeholder="Filtrer par équipe ou journée" class="filter-input" />
       <table>
         <thead>
           <tr>
@@ -68,63 +192,100 @@ document.addEventListener("DOMContentLoaded", () => {
           </tr>
         </thead>
         <tbody id="matchesBody"></tbody>
-      </table>`;
+      </table>
+    `;
     loadMatches();
   }
 
   function loadMatches() {
     fetch("data/matches.json")
-      .then(res => res.json())
+      .then(res => {
+        if (!res.ok) throw new Error("matches.json introuvable");
+        return res.json();
+      })
       .then(data => {
-        matchesData = data;
+        matchesData = Array.isArray(data) ? data : [];
         renderMatchesTable(matchesData);
-        document.getElementById("filterInput").addEventListener("input", e => {
-          const term = e.target.value.toLowerCase();
-          const filtered = matchesData.filter(m =>
-            m.equipe.toLowerCase().includes(term) || m.journee.toLowerCase().includes(term)
-          );
-          renderMatchesTable(filtered);
-        });
+        const filterInput = document.getElementById("filterInput");
+        if (filterInput) {
+          filterInput.addEventListener("input", e => {
+            const term = e.target.value.toLowerCase().trim();
+            const filtered = matchesData.filter(m =>
+              (m.equipe || "").toLowerCase().includes(term) ||
+              (m.journee || "").toLowerCase().includes(term)
+            );
+            renderMatchesTable(filtered);
+          });
+        }
+      })
+      .catch(err => {
+        const tbody = document.getElementById("matchesBody");
+        if (tbody) {
+          tbody.innerHTML = `<tr><td colspan="16" style="color:#ef4444;">Erreur: ${err.message}</td></tr>`;
+        }
       });
   }
 
   function renderMatchesTable(list) {
     const tbody = document.getElementById("matchesBody");
+    if (!tbody) return;
     tbody.innerHTML = "";
     list.forEach((match, index) => {
       const row = document.createElement("tr");
       row.style.cursor = "pointer";
       row.innerHTML = `
-        <td>${match.equipe}</td><td>${match.journee}</td><td>${match.points}</td><td>${match.fg}</td><td>${match.fg_pct}</td>
-        <td>${match["2pts"]}</td><td>${match["3pts"]}</td><td>${match.ast}</td><td>${match.stl}</td><td>${match.blk}</td>
-        <td>${match.rbo}</td><td>${match.rbd}</td><td>${match.frec}</td><td>${match.tf}</td><td>${match.diff}</td><td>${match.resultat}</td>
+        <td>${sanitize(match.equipe)}</td>
+        <td>${sanitize(match.journee)}</td>
+        <td>${sanitize(match.points)}</td>
+        <td>${sanitize(match.fg)}</td>
+        <td>${sanitize(match.fg_pct)}</td>
+        <td>${sanitize(match["2pts"])}</td>
+        <td>${sanitize(match["3pts"])}</td>
+        <td>${sanitize(match.ast)}</td>
+        <td>${sanitize(match.stl)}</td>
+        <td>${sanitize(match.blk)}</td>
+        <td>${sanitize(match.rbo)}</td>
+        <td>${sanitize(match.rbd)}</td>
+        <td>${sanitize(match.frec)}</td>
+        <td>${sanitize(match.tf)}</td>
+        <td>${sanitize(match.diff)}</td>
+        <td>${sanitize(match.resultat)}</td>
       `;
-      row.onclick = () => {
-        currentMatchIndex = index;
-        showMatchDetail(match);
-      };
+      row.addEventListener("click", () => {
+        // Trouver l’index réel dans matchesData (utile si filtré)
+        const originalIndex = matchesData.findIndex(m =>
+          m.equipe === match.equipe && m.journee === match.journee
+        );
+        currentMatchIndex = originalIndex >= 0 ? originalIndex : index;
+        showMatchDetail(matchesData[currentMatchIndex]);
+      });
       tbody.appendChild(row);
     });
   }
 
+  // Détail du match — grille + navigation + graphique
   function showMatchDetail(match) {
     app.innerHTML = `
-      <h1>Détail du match — ${match.equipe} (${match.journee})</h1>
+      <h1>Détail du match — ${sanitize(match.equipe)} (${sanitize(match.journee)})</h1>
       <div class="card">
-        <p><strong>Points :</strong> ${match.points}</p>
-        <p><strong>FG :</strong> ${match.fg} (${match.fg_pct})</p>
-        <p><strong>2pts :</strong> ${match["2pts"]}</p>
-        <p><strong>3pts :</strong> ${match["3pts"]}</p>
-        <p><strong>AST :</strong> ${match.ast}</p>
-        <p><strong>STL :</strong> ${match.stl}</p>
-        <p><strong>BLK :</strong> ${match.blk}</p>
-        <p><strong>RBO :</strong> ${match.rbo}</p>
-        <p><strong>RBD :</strong> ${match.rbd}</p>
-        <p><strong>FREC :</strong> ${match.frec}</p>
-        <p><strong>TF :</strong> ${match.tf}</p>
-        <p><strong>Diff :</strong> ${match.diff}</p>
-        <p><strong>Résultat :</strong> ${match.resultat}</p>
-        <canvas id="matchChart"></canvas>
+        <div class="stats-grid">
+          <p><strong>Points :</strong> ${sanitize(match.points)}</p>
+          <p><strong>FG :</strong> ${sanitize(match.fg)} (${sanitize(match.fg_pct)})</p>
+          <p><strong>2pts :</strong> ${sanitize(match["2pts"])}</p>
+          <p><strong>3pts :</strong> ${sanitize(match["3pts"])}</p>
+          <p><strong>AST :</strong> ${sanitize(match.ast)}</p>
+          <p><strong>STL :</strong> ${sanitize(match.stl)}</p>
+          <p><strong>BLK :</strong> ${sanitize(match.blk)}</p>
+          <p><strong>RBO :</strong> ${sanitize(match.rbo)}</p>
+          <p><strong>RBD :</strong> ${sanitize(match.rbd)}</p>
+          <p><strong>FREC :</strong> ${sanitize(match.frec)}</p>
+          <p><strong>TF :</strong> ${sanitize(match.tf)}</p>
+          <p><strong>Diff :</strong> ${sanitize(match.diff)}</p>
+          <p><strong>Résultat :</strong> ${sanitize(match.resultat)}</p>
+        </div>
+
+        <canvas id="matchChart" style="max-width:700px; margin-top:16px;"></canvas>
+
         <div class="buttons">
           <button id="prevMatch">← Précédent</button>
           <button id="nextMatch">Suivant →</button>
@@ -133,7 +294,8 @@ document.addEventListener("DOMContentLoaded", () => {
       </div>
     `;
 
-    document.getElementById("backToMatches").onclick = () => renderMatchesView();
+    // Boutons
+    document.getElementById("backToMatches").onclick = () => navigateTo("matches");
     document.getElementById("prevMatch").onclick = () => {
       if (currentMatchIndex > 0) {
         currentMatchIndex--;
@@ -147,14 +309,26 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     };
 
+    // Graphique
     const ctx = document.getElementById("matchChart").getContext("2d");
-    new Chart(ctx, {
+    if (activeChart) {
+      activeChart.destroy();
+      activeChart = null;
+    }
+    activeChart = new Chart(ctx, {
       type: "bar",
       data: {
         labels: ["Points", "AST", "STL", "BLK", "RBO", "RBD"],
         datasets: [{
           label: "Statistiques",
-          data: [match.points, match.ast, match.stl, match.blk, match.rbo, match.rbd],
+          data: [
+            toNumber(match.points),
+            toNumber(match.ast),
+            toNumber(match.stl),
+            toNumber(match.blk),
+            toNumber(match.rbo),
+            toNumber(match.rbd)
+          ],
           backgroundColor: "#2563eb"
         }]
       },
@@ -166,6 +340,13 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Vue par défaut
-  loadView("home");
+  // Utilitaires
+  function sanitize(val) {
+    if (val === null || val === undefined) return "";
+    return String(val);
+  }
+  function toNumber(val) {
+    const n = Number(val);
+    return isNaN(n) ? 0 : n;
+  }
 });
