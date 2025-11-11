@@ -1,0 +1,101 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  display: flex;
+  min-height: 100vh;
+  background: #f4f5f7;
+}
+
+/* Sidebar */
+aside {
+  width: 220px;
+  background: #1f2937;
+  color: white;
+  padding: 20px;
+  display: none;
+}
+aside h2 {
+  font-size: 18px;
+  margin-bottom: 12px;
+}
+aside nav a {
+  display: block;
+  padding: 8px 12px;
+  margin-bottom: 6px;
+  color: white;
+  text-decoration: none;
+  border-radius: 6px;
+}
+aside nav a.active,
+aside nav a:hover {
+  background: rgba(255,255,255,0.15);
+}
+
+/* Main content */
+main {
+  flex: 1;
+  padding: 20px;
+}
+
+/* Tables */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+th, td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid #e5e7eb;
+}
+th {
+  background: #2563eb;
+  color: white;
+}
+tr:last-child td {
+  border-bottom: none;
+}
+
+/* Buttons */
+button {
+  padding: 8px 14px;
+  background: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+button:hover {
+  background: #1e40af;
+}
+
+/* Mobile nav */
+.mobile-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #1f2937;
+  display: flex;
+  justify-content: space-around;
+  padding: 8px 0;
+}
+.mobile-nav button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 20px;
+}
+
+/* Responsive */
+@media (min-width: 768px) {
+  aside {
+    display: block;
+  }
+  .mobile-nav {
+    display: none;
+  }
+}
